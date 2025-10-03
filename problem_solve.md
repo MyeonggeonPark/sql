@@ -35,3 +35,4 @@ WHERE w1.temperature > w2.temperature;
 #### SQL JOIN ON
 SQL의 JOIN 조건은 “어떤 행과 어떤 행을 연결할지”를 명시하는 **논리식(boolean expression)** 일 뿐입니다.   
 즉, 테이블을 “한 줄씩 순차적으로 하루 더해서 붙이는” 게 아니라, 조건을 만족하는 모든 행 쌍을 찾아서 조합하는 거예요.   
+------

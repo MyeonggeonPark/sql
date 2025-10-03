@@ -60,4 +60,43 @@ SELECT u.user_id, p.product_id
 FROM users u
 CROSS JOIN products p;
 ```
-> 예시: 고객 × 상품 모든 가능한 조합, 추천 시스템 후보군 생성(모든 고객에게 모든 상품 매칭)
+> 예시: 고객 × 상품 모든 가능한 조합, 추천 시스템 후보군 생성(모든 고객에게 모든 상품 매칭)   
+
+
+
+
+- 질문 정리:
+1. LEFT JOIN과 LEFT OUTER JOIN은 같다.
+2. NULL 값의 처리 방법
+   - IS NULL / IS NOT NULL
+   - NULL 여부 확인
+     ```sql
+     SELECT *
+     FROM users
+     WHERE phone_number IS NULL;
+     ```
+
+
+   - COALESCE(expr1, expr2, ..., exprN)   
+   - NULL을 대체하는 표준 SQL 함수
+   - 왼쪽부터 차례로 평가해서 첫 번째로 NULL 값이 아닌 값을 반환 -> 이 성질을 이용하여 NULL 값을 치환
+     ```sql
+     SELECT user_id, COALESCE(phone_number, '미등록') AS phone
+     FROM users;
+     ```
+   - phone_number의 NULL 값을 미등록으로 치환   
+   - ? 이 함수는 행단위로 확인을 하기때문에 테이블을 FULL INDEXING 한다고 생각하면 될까?
+  
+
+   - CASE WHEN   
+   - 조건문으로 NULL 제어   
+     ```sql
+     SELECT order_id,
+       CASE WHEN discount IS NULL THEN 0 ELSE discount END AS discount
+     FROM orders;
+     ```
+   - 할인율이 NULL이면 0으로 변환, NULL이 아니면 원래 할인율 값을 반환   
+   - ? 표준 SQL문에서 CASE WHEN 조건 부분에 컬럼으로 구성된 수식을 넣을 수 있을까? 만약 가능하다면 연산에 효율적인 부분은 무엇이 있을까?   
+  
+
+   - 

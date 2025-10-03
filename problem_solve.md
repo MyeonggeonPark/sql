@@ -80,7 +80,7 @@ SELECT
   ) AS 'rank'
 FROM Scores AS s
 ORDER BY s.score DESC;
-```
+```   
 score를 정렬하고 숫자를 rank 부여하지 않고,   
 rank의 진짜 의미를 subquery로 구현   
 실제로는 dense_rank를 구현한 것과 같다.   

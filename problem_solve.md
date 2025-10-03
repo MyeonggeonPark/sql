@@ -149,3 +149,32 @@ LEFT JOIN의 경우 1:1+ 구조가 어떻게 출력되는지 모르겠다.
 CAST('2025-10-04' AS DATE)
 CAST('2025-10-04 13:45:00' AS TIMESTAMP)
 ```
+
+
+------
+
+
+[1174. Immediate Food Delivery](https://leetcode.com/problems/immediate-food-delivery-ii/description/)   
+```sql
+SELECT
+    ROUND(SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END) / COUNT(order_date) * 100, 2) AS immediate_percentage
+FROM Delivery d
+WHERE d.order_date IN (
+    SELECT MIN(order_date)
+    FROM Delivery
+    GROUP BY customer_id
+);
+```
+처음 쿼리를 작성할 때, d.order_date만 IN 으로 설정하여, 첫주문 날짜가 겹치는 고객도 함께 집계되는 구조   
+```sql
+SELECT
+    ROUND(SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END) / COUNT(order_date) * 100, 2) AS immediate_percentage
+FROM Delivery d
+WHERE (d.customer_id, d.order_date) IN (
+    SELECT customer_id, MIN(order_date)
+    FROM Delivery
+    GROUP BY customer_id
+);
+```
+customer_id를 사용하여 data 중복을 해결   
+- SUM, COUNT 함수는 행 전체를 다상으로 적용되기 때문에, GROUP BY 없이 적용

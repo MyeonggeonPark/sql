@@ -125,3 +125,9 @@ CROSS JOIN products p;
      ORDER BY price NULLS LAST;
      ```
    - 가격이 NULL 값인 상품은 마지막에 표시
+
+  
+3. Common Table Expression(CTE)를 사용하는 경우
+   - JOIN만 사용하는 경우
+   - Subquery 사용하는 경우: 조건 필터링을 하는 경우, 직관적으로 빠를 수 있음
+   - CTE를 사용하는 경우: 중간 집계 테이블이 필요한 경우 유지보수, 테이블의 재사용에 용이

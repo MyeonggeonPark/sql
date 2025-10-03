@@ -13,7 +13,10 @@ INNER JOIN orders o
 
 - LEFT JOIN(LEFT OUTER JOIN):   
 - 왼쪽 테이블의 모든행 + 오른쪽 테이블 행 반환   
-- 오른쪽에 매칭되는 값이 없으면 NULL 채움
+- 오른쪽에 매칭되는 값이 없으면 NULL 채움   
+  - LEFT JOIN은 왼쪽(Prices)의 각 행을 최소 1행으로 무조건 유지   
+  - 오른쪽에 조건을 만족하는 행이 여러 개(N개) 있으면, 왼쪽 1행이 오른쪽의 N행과 각각 결합되어 N행으로 “증식”   
+  - 오른쪽에 조건을 만족하는 행이 0개면, 해당 왼쪽 행은 오른쪽 컬럼이 모두 NULL인 1행   
 ```sql
 SELECT u.user_id, u.name, o.order_id
 FROM users u

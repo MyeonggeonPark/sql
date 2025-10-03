@@ -9,6 +9,8 @@ INNER JOIN orders o
 ```
 
 
+
+
 - LEFT JOIN(LEFT OUTER JOIN):   
 - 왼쪽 테이블의 모든행 + 오른쪽 테이블 행 반환   
 - 오른쪽에 매칭되는 값이 없으면 NULL 채움
@@ -19,6 +21,8 @@ LEFT JOIN orders o
   ON u.user_id = o.user_id;
 ```
 > 질문: NULL 값을 어떻게 처리할까?, LEFT JOIN과 LEFT OUTER JOIN은 차이가 없을까?
+
+
 
 
 - RIGHT JOIN:
@@ -32,6 +36,8 @@ RIGHT JOIN orders o
 ```
 
 
+
+
 - FULL OUTER JOIN:
 - 왼쪽 + 오른쪽 테이블의 모든 행 반환   
 - 매칭 안되면 NULL로 채움
@@ -42,6 +48,8 @@ FULL OUTER JOIN orders o
   ON u.user_id = o.user_id;
 ```
 > 질문: 실무 혹은 분석을 하는 경우 왜 FULL OUTER JOIN을 사용할까? 사용하는 경우를 알고 싶다.   
+
+
 
 
 - CROSS JOIN:

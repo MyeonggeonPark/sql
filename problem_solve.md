@@ -36,6 +36,8 @@ WHERE w1.temperature > w2.temperature;
 SQL의 JOIN 조건은 “어떤 행과 어떤 행을 연결할지”를 명시하는 **논리식(boolean expression)** 일 뿐입니다.   
 즉, 테이블을 “한 줄씩 순차적으로 하루 더해서 붙이는” 게 아니라, 조건을 만족하는 모든 행 쌍을 찾아서 조합하는 거예요.   
 ------
+
+
 [626. Exchange Seats](https://leetcode.com/problems/exchange-seats/description/)   
 ```sql
 SELECT
@@ -60,6 +62,8 @@ ON (
 ORDER BY s1.id;
 ```
 ------
+
+
 [178. Rank Scores](https://leetcode.com/problems/rank-scores/description/)   
 ```sql
 SELECT
@@ -85,3 +89,5 @@ score를 정렬하고 숫자를 rank 부여하지 않고,
 rank의 진짜 의미를 subquery로 구현   
 실제로는 dense_rank를 구현한 것과 같다.   
 ------
+
+

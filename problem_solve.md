@@ -59,3 +59,29 @@ ON (
 )
 ORDER BY s1.id;
 ```
+------
+[178. Rank Scores](https://leetcode.com/problems/rank-scores/description/)   
+```sql
+SELECT
+    score,
+    DENSE_RANK() OVER(ORDER BY score DESC) AS 'rank'
+FROM Scores
+ORDER BY score DESC;
+```
+윈도우 함수 사용 풀이 쉽게 가능   
+윈도우 함수를 사용하지 않고 풀이   
+```sql
+SELECT
+  s.score,
+  (
+    SELECT COUNT(DISTINCT s2.score)
+    FROM Scores AS s2
+    WHERE s2.score >= s.score
+  ) AS 'rank'
+FROM Scores AS s
+ORDER BY s.score DESC;
+```
+score를 정렬하고 숫자를 rank 부여하지 않고,   
+rank의 진짜 의미를 subquery로 구현   
+실제로는 dense_rank를 구현한 것과 같다.   
+------

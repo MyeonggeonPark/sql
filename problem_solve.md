@@ -97,3 +97,50 @@ rank의 진짜 의미를 subquery로 구현
 ------
 
 
+[1251. Average Selling Price](https://leetcode.com/problems/average-selling-price/description/)   
+#### SQL에서 날짜 비교   
+```sql
+WITH unit_price AS(
+    SELECT
+        us.product_id,
+        us.units,
+        p.price
+    FROM Prices p
+    LEFT JOIN UnitsSold us
+    ON (us.product_id = p.product_id) AND (p.start_date <= us.purchase_date) AND (p.end_date >= us.purchase_date)
+),
+
+total_sum AS (
+    SELECT
+        product_id,
+        SUM(units) AS total_units,
+        SUM(units * price) AS total_revenue
+    FROM unit_price
+    GROUP BY product_id
+)
+
+SELECT
+    product_id,
+    ROUND(total_revenue / total_units, 2) AS average_price
+FROM total_sum
+```
+통과하지 못한 쿼리: UnitsSold가 모두 빈 값으로 주어지는 경우, NULL값을 처리 할 수 없다.   
+무제의 요구 조건에서 Prices 데이터가 주어지고 판매량이 0인 경우 평균 값을 0으로 리턴해야한다고 설명.   
+```sql
+SELECT
+    p.product_id,
+    IFNULL(ROUND(SUM(p.price * u.units) / SUM(u.units), 2), 0) AS average_price
+FROM
+    Prices AS p
+LEFT JOIN
+    UnitsSold AS u
+ON
+    p.product_id = u.product_id
+    AND u.purchase_date BETWEEN p.start_date AND p.end_date
+GROUP BY
+    p.product_id;
+```
+답안을 찾아보고 이해가지 않는 부분이 두 가지 있다.   
+지금 이 테이블의 조인 구조는 Prices 테이블에 UnitsSold 테이블이 -> 1:1+ 이상으로 매핑되는 구조인데,   
+LEFT JOIN의 경우 1:1+ 구조가 어떻게 출력되는지 모르겠다.   
+다른 하나는 CTE를 써서 나눠서 테이블 연산을 하는것이 좋은지, 답안 처럼 한번에 연산하는게 좋은지 모르겠다.   

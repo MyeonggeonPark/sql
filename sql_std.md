@@ -99,4 +99,29 @@ CROSS JOIN products p;
    - ? 표준 SQL문에서 CASE WHEN 조건 부분에 컬럼으로 구성된 수식을 넣을 수 있을까? 만약 가능하다면 연산에 효율적인 부분은 무엇이 있을까?   
   
 
-   - 
+   - NULLIF(expr1, expr2)   
+   - 두 값이 같으면 NULL 반환, 다르면 첫 번째 값 반환   
+     ```sql
+     SELECT NULLIF(credit_used, 0) AS valid_credit
+     FROM payments;
+     ```
+   - credit_used가 0이면 NULL 반환, 지금까지와 다르게 특정 조건의 값을 NULL로 치환하는 방법
+  
+
+   - 집계 함수와 NULL
+   - 표준 SQL 집계 함수는 자동으로 NULL을 제외하고 계산
+     ```sql
+     SELECT AVG(rating)
+     FROM reviews;
+     ```
+   - 리뷰 평점에서 NULL인 행은 제외하고 평균 계산
+  
+
+   - 정렬 시 NULL 처리
+   - 표준 SQL: NULLS FIRST, NULLS LAST
+     ```sql
+     SELECT *
+     FROM products
+     ORDER BY price NULLS LAST;
+     ```
+   - 가격이 NULL 값인 상품은 마지막에 표시

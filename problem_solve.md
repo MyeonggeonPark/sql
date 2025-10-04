@@ -265,7 +265,7 @@ NOT EXISTS의 경우 서브쿼리의 결과가 하나도 없을 때 TRUE를 반�
 ------
 
 
-[177. Nth Highest Salary](https://leetcode.com/problems/nth-highest-salary/description   
+[177. Nth Highest Salary](https://leetcode.com/problems/nth-highest-salary/description)   
 ```sql
 CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
 BEGIN

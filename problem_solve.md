@@ -42,7 +42,7 @@ SQL의 JOIN 조건은 “어떤 행과 어떤 행을 연결할지”를 명시�
 ------
 
 
-[626. Exchange Seats](https://leetcode.com/problems/exchange-seats/description/)   
+[626. Exchange Seats](https://leetcode.com/problems/exchange-seats/description/)
 ```sql
 SELECT
     id,

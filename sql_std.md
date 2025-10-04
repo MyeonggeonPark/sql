@@ -134,3 +134,26 @@ CROSS JOIN products p;
    - JOIN만 사용하는 경우
    - Subquery 사용하는 경우: 조건 필터링을 하는 경우, 직관적으로 빠를 수 있음
    - CTE를 사용하는 경우: 중간 집계 테이블이 필요한 경우 유지보수, 테이블의 재사용에 용이
+
+
+# Aggregate Functions   
+표준 SQL 집계 함수   
+- COUNT   
+- SUM   
+- AVG   
+- MIN   
+- MAX   
+- VAR_POP   
+- VAR_SAMP   
+- STDDEV_POP   
+- STDDEV_SAMP   
+- COVAR_POP   
+- COVAR_SAMP   
+- CORR
+
+
+집계 함수의 적용 범위는 크게 두 가지로 나눌 수 있다.   
+GROUP BY(O): 그룹별 행에 적용 및 집계   
+- WHERE: 그룹이 적용되지 전 행들을 필터링
+- HAVING: 그룹이 적용된 후의 집계 결과 필터링
+GROUP BY(X): 전체 행을 대상으로 집계

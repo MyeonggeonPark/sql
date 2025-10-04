@@ -230,3 +230,35 @@ JOIN (
 ------
 
 
+[특정 기간동안 대여 가능한 자동차들의 대여비용 구하기](https://school.programmers.co.kr/learn/courses/30/lessons/157339)   
+```sql
+SELECT
+  t.CAR_ID,
+  t.CAR_TYPE,
+  t.FEE
+FROM (
+  SELECT
+    c.CAR_ID,
+    c.CAR_TYPE,
+    ROUND(c.DAILY_FEE * 30 * (1 - COALESCE(p.DISCOUNT_RATE, 0) / 100)) AS FEE
+  FROM CAR_RENTAL_COMPANY_CAR c
+  JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN p
+    ON p.CAR_TYPE = c.CAR_TYPE
+   AND p.DURATION_TYPE = '30일 이상'
+  WHERE c.CAR_TYPE IN ('세단', 'SUV')
+    AND NOT EXISTS (
+      SELECT 1
+      FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY h
+      WHERE h.CAR_ID = c.CAR_ID
+        AND h.START_DATE <= DATE '2022-11-30'
+        AND h.END_DATE   >= DATE '2022-11-01'
+    )
+) AS t
+WHERE t.FEE < 2000000
+ORDER BY t.FEE DESC, t.CAR_TYPE ASC, t.CAR_ID DESC;
+```
+다른 부분들은 비슷했는데, NOT EXISTS관련 부분이 내 답안과 차이가 있었다.   
+NOT EXISTS의 경우 서브쿼리의 결과가 하나도 없을 때 TRUE를 반환하는 명령어이다.   
+반대로 EXISTS의 경우는 서브쿼리의 결과가 하나 이상 있을 때 TRUE를 반환하는 명령어이다.   
+
+

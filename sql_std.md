@@ -157,3 +157,69 @@ GROUP BY(O): 그룹별 행에 적용 및 집계
 - WHERE: 그룹이 적용되지 전 행들을 필터링
 - HAVING: 그룹이 적용된 후의 집계 결과 필터링
 GROUP BY(X): 전체 행을 대상으로 집계
+
+
+# CREATE TABLE   
+```sql
+CREATE TABLE users (
+  id INT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  gender CHAR(1)
+);
+
+CREATE TABLE orders (
+  id INT PRIMARY KEY,
+  user_id INT NOT NULL,
+  amount DECIMAL(10,2),
+  order_date DATE,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+```
+CREATE TABLE: 테이블 생성 명령어   
+PRIMARY KEY: 테이블에서 중복 X, 기본이되는 키 값을 설정   
+FOREIGN KEY: 참조키, 다른 테이블과 연결   
+NOT NULL: NULL 값이 될 수 없는 필수 값   
+VARCHAR / INT / DATE: 데이터 타입 설정   
+```sql
+CREATE TABLE usersRoles (
+  userId INTEGER,
+  roleId INTEGER,
+  PRIMARY KEY (userId, roleId),
+  FOREIGN KEY (userId) REFERENCES users(id),
+  FOREIGN KEY (roleId) REFERENCES roles(id)
+);
+```
+PRIMARY KEY (userId, roleId): 복합 기본키, userId와 roleId의 조합이 유일   
+FOREIGN KEY (userId) REFERENCES users(id): 외래키 제약, userId 값은 반드시 users 테이블의 id에 존재   
+```sql
+CREATE TABLE users (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  gender CHAR(1) CHECK (gender IN ('m', 'f')),
+  join_date DATE DEFAULT (CURRENT_DATE)
+);
+
+CREATE TABLE products (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  category VARCHAR(30),
+  price DECIMAL(10,2) CHECK (price > 0)
+);
+
+CREATE TABLE orders (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  product_id INT NOT NULL,
+  amount INT DEFAULT 1 CHECK (amount > 0),
+  order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+CREATE TABLE users (
+  id INT PRIMARY KEY,
+  email VARCHAR(100) UNIQUE,     -- 이메일은 중복 불가
+  name VARCHAR(50)
+);
+```
+UNIQUE와 PRIMARY KEY는 두 명령어 모두 중복이 불가하지만,   
+UNIQUE는 NULL 값이 중복을 허용하는 경우가 있다.

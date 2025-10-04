@@ -262,3 +262,30 @@ NOT EXISTS의 경우 서브쿼리의 결과가 하나도 없을 때 TRUE를 반�
 반대로 EXISTS의 경우는 서브쿼리의 결과가 하나 이상 있을 때 TRUE를 반환하는 명령어이다.   
 
 
+------
+
+
+[177. Nth Highest Salary](https://leetcode.com/problems/nth-highest-salary/description   
+```sql
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+
+SET N=N-1;
+
+  RETURN (
+      SELECT
+        DISTINCT salary
+      FROM Employee
+      ORDER BY salary DESC 
+      LIMIT 1 OFFSET N      
+  );
+END
+```
+변수를 입력 받는 방법   
+행의 개수 제한: LIMIT   
+첫 행을 건너뛰고 몇번째 행부터 출력할지: OFFSET   
+
+
+------
+
+

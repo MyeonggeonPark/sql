@@ -178,3 +178,53 @@ WHERE (d.customer_id, d.order_date) IN (
 ```
 customer_id를 사용하여 data 중복을 해결   
 - SUM, COUNT 함수는 행 전체를 다상으로 적용되기 때문에, GROUP BY 없이 적용
+
+
+------
+
+
+[184. Department Highest Salary](https://leetcode.com/problems/department-highest-salary/description/)   
+```sql
+WITH top AS (
+    SELECT
+        d.name,
+        e.departmentId,
+        MAX(e.salary) AS salary
+    FROM Employee e
+    LEFT JOIN Department d
+    ON e.departmentId = d.id
+    GROUP BY d.name, e.departmentId
+)
+SELECT
+    t.name AS Department,
+    e.name AS Employee,
+    e.salary AS Salary
+FROM Employee e
+LEFT JOIN top t
+ON e.departmentId = t.departmentId AND e.salary = t.salary
+WHERE t.name IS NOT NULL;
+```
+내가 작성한 쿼리는 제공되는 테이블을 join하고, CTE로 생성된 테이블을 다시 조인하는 형태로 작성되었다.   
+MAX 값을 구하여 그에 해당하는 값만 출력이 필요하기 때문에, WHERE 절에 서브쿼리로 넣어서 매번 계산을 하는 경우는 피하고 싶었다.   
+그러나 JOIN부분에 subquery로 넣으면 더 적은 연산으로 해결할 수 있다...   
+```sql
+SELECT d.name AS Department,
+       e.name AS Employee,
+       e.salary AS Salary
+FROM Employee e
+JOIN Department d
+  ON e.departmentId = d.id
+JOIN (
+  SELECT departmentId, MAX(salary) AS max_salary
+  FROM Employee
+  GROUP BY departmentId
+) m
+  ON e.departmentId = m.departmentId
+ AND e.salary = m.max_salary;
+```
+필요한 max을 사용하여 join할 경우 한번만 연산하면 되기 때문에, 연산이 중복되는 것을 피하게 된다.   
+
+
+------
+
+

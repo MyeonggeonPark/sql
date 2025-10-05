@@ -223,3 +223,66 @@ CREATE TABLE users (
 ```
 UNIQUE와 PRIMARY KEY는 두 명령어 모두 중복이 불가하지만,   
 UNIQUE는 NULL 값이 중복을 허용하는 경우가 있다.
+
+
+# 문자열   
+- 문자열 길기 확인   
+```sql
+SELECT LENGTH('CROCS');         -- 5
+SELECT CHAR_LENGTH('크록스');   -- 3 (문자 수 기준)
+```
+- 문자열 자르기   
+```sql
+SELECT SUBSTRING('CROCSSHOP', 1, 5);  -- CROCS
+SELECT LEFT('CROCSSHOP', 5);          -- CROCS
+SELECT RIGHT('CROCSSHOP', 4);         -- SHOP
+```
+- 문자열 연결   
+```sql
+SELECT CONCAT('CROCS', '-', 'SALE');     -- CROCS-SALE
+SELECT 'CROCS' || '-' || 'SALE';         -- PostgreSQL / Oracle 스타일
+
+SELECT CONCAT(brand, '_', season) AS brand_season
+FROM products;
+```
+- 문자열 검색
+```sql
+SELECT INSTR('CROCS', 'O');        -- 3 (O의 위치)
+SELECT POSITION('O' IN 'CROCS');   -- 3
+SELECT LOCATE('SHOP', 'CROCSSHOP'); -- 6
+
+WHERE url LIKE '%campaign%'
+```
+다른 문법들보다 like 검색을 가장 유용   
+그러나 성능의 문제는 생각해봐야 한다.   
+> LIKE '패턴%' 형태는 인덱스 사용 가능하지만,   
+> LIKE '%패턴' 혹은 LIKE '%패턴%' 는 풀스캔 발생.   
+- 문자열 치환
+```sql
+SELECT REPLACE('BLACK FRIDAY', 'BLACK', 'RED');
+-- RED FRIDAY
+
+SELECT REPLACE(channel_name, '_ad', '') AS clean_channel
+FROM campaign_logs;
+```
+- 문자열 공백 제거   
+```sql
+SELECT TRIM('  CROCS  ');   -- 'CROCS'
+SELECT LTRIM('  CROCS');    -- 'CROCS'
+SELECT RTRIM('CROCS  ');    -- 'CROCS'
+```
+- 문자열 대소문자 변환   
+```sql
+SELECT UPPER('crocs');  -- CROCS
+SELECT LOWER('CROCS');  -- crocs
+```
+- 패턴 매칭
+```sql
+SELECT REGEXP_REPLACE('CR-1234-BLK', '[^0-9]', '');
+-- 숫자만 남김 → 1234
+SELECT REGEXP_LIKE('crocs_summer_sale', 'sale$');
+-- 'sale'로 끝나는 문자열만
+
+SELECT REGEXP_REPLACE(product_name, '(BLACK|WHITE|RED|BLUE)$', '') AS base_name
+FROM products;
+```

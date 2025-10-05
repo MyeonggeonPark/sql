@@ -417,3 +417,43 @@ CTE를 사용하면 생각보다 쉽게 풀수 있었다.
 ------
 
 
+[market analysis i](https://leetcode.com/problems/market-analysis-i/)   
+```sql
+# Write your MySQL query statement below
+WITH buyer AS (
+    SELECT
+        o.buyer_id,
+        COUNT(o.order_id) AS orders_cnt
+    FROM Orders o
+    LEFT JOIN Users u
+    ON o.buyer_id = u.user_id
+    WHERE order_date LIKE '2019%'
+    GROUP BY o.buyer_id
+)
+SELECT
+    ul.user_id AS buyer_id,
+    ul.join_date,
+    COALESCE(b.orders_cnt, 0) AS orders_in_2019
+FROM Users ul
+LEFT JOIN buyer b
+ON ul.user_id = b.buyer_id;
+```
+CTE 사용해서 해결했지만,   
+```sql
+SELECT
+  u.user_id AS buyer_id,
+  u.join_date,
+  COALESCE(SUM(
+    CASE WHEN o.order_date >= '2019-01-01' AND o.order_date < '2020-01-01' THEN 1 ELSE 0 END
+  ), 0) AS orders_in_2019
+FROM Users u
+LEFT JOIN Orders o
+  ON o.buyer_id = u.user_id
+GROUP BY u.user_id, u.join_date;
+```
+조건문으로 더 간결하게 해결 가능   
+
+
+------
+
+

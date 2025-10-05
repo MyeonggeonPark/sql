@@ -310,3 +310,110 @@ DATEDIFF
 ------
 
 
+[find stores with inventory imbalance](https://leetcode.com/problems/find-stores-with-inventory-imbalance/description/)   
+```sql
+# Write your MySQL query statement below
+WITH rank_price AS (
+    SELECT
+        inventory_id,
+        store_id,
+        product_name,
+        quantity,
+        price,
+        ROW_NUMBER() OVER (PARTITION BY store_id ORDER BY price DESC, product_name, inventory_id) AS max_price,
+        ROW_NUMBER() OVER (PARTITION BY store_id ORDER BY price ASC, product_name, inventory_id) AS min_price
+    FROM inventory
+),
+
+rank_agg AS (
+    SELECT
+        store_id,
+        MAX(CASE WHEN max_price = 1 THEN product_name END) AS maxp,
+        MAX(CASE WHEN max_price = 1 THEN quantity END) AS maxpp,
+        MAX(CASE WHEN min_price = 1 THEN product_name END) AS minp,
+        MAX(CASE WHEN min_price = 1 THEN quantity END) AS minpp
+    FROM rank_price
+    GROUP BY store_id
+),
+
+product AS (
+    SELECT
+        store_id
+    FROM inventory
+    GROUP BY store_id
+    HAVING COUNT(DISTINCT product_name) >= 3
+)
+
+SELECT
+    s.store_id,
+    s.store_name,
+    s.location,
+    r.maxp AS most_exp_product,
+    r.minp AS cheapest_product,
+    ROUND((NULLIF(minpp, 0) / NULLIF(maxpp, 0)), 2) AS imbalance_ratio
+FROM stores s
+INNER JOIN product p
+ON s.store_id = p.store_id
+INNER JOIN rank_agg r
+ON s.store_id = r.store_id
+WHERE r.maxpp < r.minpp
+ORDER BY ROUND((minpp / maxpp), 2) DESC, s.store_name ASC;
+```
+행이 다른 값을 하나의 값(가게의 최고가 물건, 최저가 물건)으로 만들어야해서 고민하는 시간이 많이 들었다.   
+그런데 생각보다 쉬운 방법이 있다.   
+JOIN 대상이 되는 테이블을 붙여 버리는 방법이 있었다.   
+```sql
+# Write your MySQL query statement below
+# Write your MySQL query statement below
+WITH high AS (
+    SELECT store_id,
+        inventory_id,
+        product_name,
+        quantity AS max_quant,
+        price AS max_price,
+        ROW_NUMBER() OVER(
+            PARTITION BY store_id
+            ORDER BY price DESC
+        ) AS rn
+    FROM inventory
+),
+low AS (
+    SELECT store_id,
+        inventory_id,
+        product_name,
+        quantity AS min_quant,
+        price AS min_price,
+        ROW_NUMBER() OVER(
+            PARTITION BY store_id
+            ORDER BY price ASC
+        ) AS rn
+    FROM inventory
+)
+SELECT h.store_id,
+    s.store_name,
+    s.location,
+    h.product_name AS most_exp_product,
+    l.product_name AS cheapest_product,
+    ROUND(min_quant / max_quant, 2) AS imbalance_ratio
+FROM high h
+    INNER JOIN low l ON h.store_id = l.store_id
+    INNER JOIN stores s ON l.store_id = s.store_id
+WHERE h.rn = 1
+    AND l.rn = 1
+    AND max_quant < min_quant
+    AND h.store_id IN (
+        SELECT store_id
+        FROM inventory
+        GROUP BY store_id
+        HAVING COUNT(inventory_id) >= 3
+    )
+ORDER BY imbalance_ratio DESC,
+    s.store_name ASC;
+```
+CTE를 사용하면 생각보다 쉽게 풀수 있었다.   
+같은 테이블에 다른 기준으로 열을 생성하기때문에, 행의 개수는 같기때문에, INNER JOIN이 가능하다.   
+
+
+------
+
+

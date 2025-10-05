@@ -289,3 +289,24 @@ END
 ------
 
 
+[3657. Find Loyal Customers](https://leetcode.com/problems/find-loyal-customers/submissions/1791935356/)   
+```sql
+SELECT
+    t.customer_id
+FROM(
+    SELECT
+        customer_id,
+        COUNT(transaction_id) AS buy,
+        DATEDIFF(MAX(transaction_date), MIN(transaction_date)) AS act,
+        SUM(CASE WHEN transaction_type LIKE 'refund%' THEN 1 ELSE 0 END) * 100 / COUNT(*) AS refund
+    FROM customer_transactions
+    GROUP BY customer_id
+) t
+WHERE t.buy >= 3 AND t.act >= 30 AND t.refund < 20;
+```
+DATEDIFF   
+
+
+------
+
+

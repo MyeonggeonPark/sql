@@ -8,9 +8,10 @@
 5. GROUP BY (집계 그룹화)
 6. HAVING (집계 결과 필터링)
 7. SELECT (컬럼 계산, 여기서 윈도우 함수 실행)
-8. ORDER BY
-9. LIMIT / FETCH
--> Window functions 은 SELECT 단계에서 계산
+   - CASE WHEN: 행단위 연산, 조건문으로 행 전체를 대상으로 집계함수를 사용할 수 없다.
+   - Window functions 은 SELECT 단계에서 계산
+9. ORDER BY
+10. LIMIT / FETCH
 ```sql
 WITH t AS(
     SELECT

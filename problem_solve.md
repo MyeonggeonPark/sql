@@ -506,3 +506,27 @@ SELECT '2025-10-06' + INTERVAL '1-2' YEAR_MONTH
 - HOUR_MINUTE
 - HOUR_SECOND
 - MINUTE_SECOND
+
+
+------
+
+
+[human traffic of stadium](https://leetcode.com/problems/human-traffic-of-stadium/)   
+```sql
+WITH base AS (
+        SELECT *,
+            LEAD(id, 1) OVER(ORDER BY id) AS next_id,
+            LEAD(id, 2) OVER(ORDER BY id) AS second_next_id,
+            LAG(id, 1) OVER(ORDER BY id) AS last_id,
+            LAG(id, 2) OVER(ORDER BY id) AS second_last_id
+        FROM stadium
+        WHERE people >= 100 
+        )
+SELECT DISTINCT id, visit_date, people
+FROM base 
+WHERE (next_id - id = 1 AND id - last_id = 1)
+    OR (second_next_id - next_id = 1 AND next_id - id = 1)
+    OR (id - last_id = 1 AND last_id - second_last_id = 1)
+ORDER BY visit_date
+```
+3개이상의 연속된 값을 구하는 경우, window function으로 추출   

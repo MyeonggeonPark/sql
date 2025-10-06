@@ -458,3 +458,35 @@ GROUP BY u.user_id, u.join_date;
 ------
 
 
+SQL에서 날짜 연산   
+```sql
+SELECT DATE_ADD('2025-10-06', INTERVAL 7 DAY);
+SELECT DATE_SUB('2025-10-06', INTERVAL 30 DAY);
+SELECT DATEDIFF('2025-10-06', '2025-09-01');
+```
+날짜 더하기   
+날짜 빼기   
+날짜 차이   
+```sql
+SELECT '2025-10-06' + INTERVAL 1 DAY;
+```
+가능한 파라미터 종류
+- YEAR
+- QUARTER
+- MONTH
+- WEEK
+- DAY
+- HOUR
+- MINUTE
+- SECONE
+복합 단위
+```sql
+SELECT '2025-10-06' + INTERVAL '1-2' YEAR_MONTH
+```
+- YEAR_MONTH
+- DAY_HOUR
+- DAY_MINUTE
+- DAY_SECOND
+- HOUR_MINUTE
+- HOUR_SECOND
+- MINUTE_SECOND

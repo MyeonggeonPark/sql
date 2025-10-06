@@ -458,6 +458,22 @@ GROUP BY u.user_id, u.join_date;
 ------
 
 
+[Game Play Analysis iv](https://leetcode.com/problems/game-play-analysis-iv/description/)
+```sql
+WITH first AS (
+    SELECT
+        player_id,
+        MIN(event_date) AS first
+    FROM Activity
+    GROUP BY player_id
+)
+
+SELECT
+    ROUND(COUNT(f.first) / COUNT(DISTINCT a.player_id), 2) AS fraction
+FROM Activity a
+LEFT JOIN first f
+ON a.player_id = f.player_id AND (a.event_date - INTERVAL 1 DAY) = f.first;
+```
 SQL에서 날짜 연산   
 ```sql
 SELECT DATE_ADD('2025-10-06', INTERVAL 7 DAY);
